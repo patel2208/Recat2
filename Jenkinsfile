@@ -2,7 +2,6 @@ pipeline{
 
 environment {
         registry = "533267104339.dkr.ecr.us-east-1.amazonaws.com/react3"
-        
     }
     agent any
    
@@ -27,4 +26,3 @@ environment {
             }
         }
     }
-}
