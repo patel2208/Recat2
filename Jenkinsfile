@@ -2,7 +2,8 @@ pipeline {
     agent any
     
     stages {
-        stage('Build') {
+        stage('Build')
+        withAWS(credentials: 'awsconfig', region: 'us-east-2')  {
             steps {
                 // Get AWS ECR login password and login to Docker
                 script {
