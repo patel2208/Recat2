@@ -1,12 +1,16 @@
 pipeline {
     agent any
-    
+environment {
+    AWS_Credential = credentials('awsconfig')
+} 
     stages {
         stage('Build')
-{   withAWS(credentials: 'awsconfig', region: 'us-east-2')  {
+    
+         {
             steps {
                 // Get AWS ECR login password and login to Docker
                 script {
+                    withAWS(credentials: AWS_Credential)
                     def dockerLogin = sh(script: 'aws ecr get-login-password --region us-east-2', returnStdout: true).trim()
                     sh "echo \${dockerLogin} | docker login --username AWS --password-stdin 533267104339.dkr.ecr.us-east-2.amazonaws.com"
                 }
@@ -17,7 +21,7 @@ pipeline {
                 // Tag Docker image
                 sh "docker tag react2:latest 533267104339.dkr.ecr.us-east-2.amazonaws.com/react2:latest"
             }
-        }
+        
 }
         
         stage('Push to ECR') {
