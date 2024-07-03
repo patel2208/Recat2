@@ -7,20 +7,28 @@ pipeline {
   agent any
   stages {
     stage('Building image') {
-      steps{
+      steps {
         script {
-          dockerImage = docker.build registry + ":$BUILD_NUMBER"
+          dockerImage = docker.build("${registry}:${env.BUILD_NUMBER}")
         }
       }
     }
     stage('Deploy image') {
-        steps{
-            script{
-                docker.withRegistry("https://" + registry, "ecr:us-east-2:" + registryCredential) {
-                    dockerImage.push()
-                }
-            }
+      steps {
+        script {
+          docker.withRegistry("https://${registry}", registryCredential) {
+            dockerImage.push()
+            dockerImage.push("latest")
+          }
         }
+      }
+    }
+  }
+  post {
+    cleanup {
+      script {
+        dockerImage.cleanUp()
+      }
     }
   }
 }
