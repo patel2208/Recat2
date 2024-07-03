@@ -3,7 +3,7 @@ pipeline {
     
     stages {
         stage('Build')
-        withAWS(credentials: 'awsconfig', region: 'us-east-2')  {
+{   withAWS(credentials: 'awsconfig', region: 'us-east-2')  {
             steps {
                 // Get AWS ECR login password and login to Docker
                 script {
@@ -18,6 +18,7 @@ pipeline {
                 sh "docker tag react2:latest 533267104339.dkr.ecr.us-east-2.amazonaws.com/react2:latest"
             }
         }
+}
         
         stage('Push to ECR') {
             steps {
