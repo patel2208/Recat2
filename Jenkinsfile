@@ -1,28 +1,11 @@
-pipeline {
-  environment {
-    registry = '533267104339.dkr.ecr.us-east-2.amazonaws.com'
-    registryCredential = 'AWS'
-    dockerImage = ''
-  }
-  agent any
-  stages {
-    stage('Building image') {
-      steps {
-        script {
-          dockerImage = docker.build("${registry}:${env.BUILD_NUMBER}")
+pipeline{
+
+    agent any
+    stages{
+        stage('Checkout'){
+            steps{
+                checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/patel2208/Recat2.git']])
+            }
         }
-      }
     }
-    stage('Deploy image') {
-      steps {
-        script {
-          docker.withRegistry("https://${registry}", registryCredential) {
-            dockerImage.push()
-            dockerImage.push("latest")
-          }
-        }
-      }
-    }
-  }
- 
 }
