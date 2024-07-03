@@ -24,11 +24,5 @@ pipeline {
       }
     }
   }
-  post {
-    cleanup {
-      script {
-        dockerImage.cleanUp()
-      }
-    }
-  }
+ 
 }
